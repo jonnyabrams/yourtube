@@ -11,6 +11,8 @@ dotenv.config()
 const app = express()
 const port = process.env.PORT || 8800
 
+app.use(express.json())
+
 app.use('/api/users', userRoutes)
 app.use('/api/auth', authRoutes)
 app.use('/api/videos', videoRoutes)
