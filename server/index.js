@@ -1,6 +1,7 @@
 import express from 'express'
 import mongoose from 'mongoose'
 import dotenv from 'dotenv'
+import cookieParser from 'cookie-parser'
 import userRoutes from './routes/userRoutes.js'
 import authRoutes from './routes/authRoutes.js'
 import videoRoutes from './routes/videoRoutes.js'
@@ -11,6 +12,7 @@ dotenv.config()
 const app = express()
 const port = process.env.PORT || 8800
 
+app.use(cookieParser())
 app.use(express.json())
 
 app.use('/api/users', userRoutes)

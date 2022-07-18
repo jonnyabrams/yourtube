@@ -1,5 +1,5 @@
 import express from 'express'
-import { signup } from '../controllers/authController'
+import { login, signup } from '../controllers/auth.js'
 
 const router = express.Router()
 
@@ -7,7 +7,7 @@ const router = express.Router()
 router.post('/signup', signup)
 
 // log in
-router.post('/login', )
+router.post('/login', login)
 
 // google authentication
 router.post('/google', )
