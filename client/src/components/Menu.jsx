@@ -74,6 +74,13 @@ const Button = styled.button`
   gap: 5px;
 `
 
+const Title = styled.h2`
+  font-size: 14px;
+  font-weight: 500;
+  color: #aaaaaa;
+  margin-bottom: 20px;
+`
+
 const Menu = ({ darkMode, setDarkMode }) => {
   return (
     <Container>
@@ -109,6 +116,7 @@ const Menu = ({ darkMode, setDarkMode }) => {
           <Button><AccountCircleOutlinedIcon />SIGN IN</Button>
         </Login>
         <Hr />
+        <Title>BEST OF YOURTUBE</Title>
         <Item>
           <LibraryMusicOutlinedIcon />
           Music
