@@ -23,6 +23,7 @@ const Container = styled.div`
   height: 100vh;
   color: ${({theme}) => theme.text};
   font-size: 14px;
+  overflow-y: scroll;
   position: sticky;
   top: 0;
 `
