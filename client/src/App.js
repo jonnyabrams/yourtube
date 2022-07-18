@@ -26,13 +26,6 @@ const App = () => {
   return (
     <ThemeProvider theme={darkMode ? darkTheme : lightTheme}>
       <Container>
-        <Menu darkMode={darkMode} setDarkMode={setDarkMode} />
-        <Main>
-          <Navbar />
-          <Wrapper>
-            
-          </Wrapper>
-        </Main>
         <BrowserRouter>
           <Menu darkMode={darkMode} setDarkMode={setDarkMode} />
           <Main>
