@@ -23,6 +23,8 @@ const Container = styled.div`
   height: 100vh;
   color: white;
   font-size: 14px;
+  position: sticky;
+  top: 0;
 `
 
 const Wrapper = styled.div`
