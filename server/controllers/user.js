@@ -1,5 +1,6 @@
 import { createError } from "../error.js"
 import User from "../models/User.js"
+import Video from "../models/Video.js"
 
 export const updateUser = async (req, res, next) => {
   if (req.params.id === req.user.id) {
@@ -42,6 +43,13 @@ export const getUser = async (req, res, next) => {
 export const subscribe = async (req, res, next) => {
   try {
 
+    await User.findByIdAndUpdate(req.user.id, {
+      $push: {subscribedTo: req.params.id}
+    })
+    await User.findByIdAndUpdate(req.params.id, {
+      $inc: { subscribers: 1}  // mongoose increment method
+    })
+    res.status(200).send('Subscription successful!')
   } catch (error) {
     next(error)
   }
@@ -50,22 +58,43 @@ export const subscribe = async (req, res, next) => {
 export const unsubscribe = async (req, res, next) => {
   try {
 
+    await User.findByIdAndUpdate(req.user.id, {
+      $pull: {subscribedTo: req.params.id}
+    })
+    await User.findByIdAndUpdate(req.params.id, {
+      $inc: { subscribers: -1}
+    })
+    res.status(200).send('Unsubscription successful')
   } catch (error) {
     next(error)
   }
 }
 
 export const like = async (req, res, next) => {
+  const id = req.user.id
+  const videoId = req.params.videoId
   try {
 
+    await Video.findByIdAndUpdate(videoId, {
+      $addToSet: { likes: id },
+      $pull: { dislikes: id }
+    }) // $addToSet makes sure it only goes in once
+    res.status(200).send('Video liked!')
   } catch (error) {
     next(error)
   }
 }
 
 export const dislike = async (req, res, next) => {
+  const id = req.user.id
+  const videoId = req.params.videoId
   try {
 
+    await Video.findByIdAndUpdate(videoId, {
+      $addToSet: { dislikes: id },
+      $pull: { likes: id }
+    }) // $addToSet makes sure it only goes in once
+    res.status(200).send('Video disliked')
   } catch (error) {
     next(error)
   }
