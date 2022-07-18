@@ -90,11 +90,31 @@ export const sub = async (req, res, next) => {
     const user = await User.findById(req.user.id)
     const subscribedChannels = user.subscribedTo
 
-    const videos = Promise.all(
+    const videos = await Promise.all(
       subscribedChannels.map(channelId => {
         return Video.find({ userId: channelId })
       })
     )
+    res.status(200).send(videos.flat().sort((a, b) => b.createdAt - a.createdAt)) // flat() to remove nested array
+  } catch (error) {
+    next(error)
+  }
+}
+
+export const getByTag = async (req, res, next) => {
+  const tags = req.query.tags.split(',')
+  try {
+    const videos = await Video.find({ tags: { $in: tags }}).limit(20)
+    res.status(200).send(videos)
+  } catch (error) {
+    next(error)
+  }
+}
+
+export const search = async (req, res, next) => {
+  const query = req.query.q
+  try {
+    const videos = await Video.find({ title: { $regex: query, $options: 'i' } }).limit(40) // case insensitive search
     res.status(200).send(videos)
   } catch (error) {
     next(error)
