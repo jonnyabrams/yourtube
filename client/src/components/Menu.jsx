@@ -49,6 +49,11 @@ const Item = styled.div`
   padding: 7.5px 0px;
 `
 
+const Hr = styled.hr`
+  margin: 15px 0px;
+  border: 0.5px solid #373737;
+`
+
 const Menu = () => {
   return (
     <Container>
@@ -69,6 +74,7 @@ const Menu = () => {
           <SubscriptionsOutlinedIcon />
           Subscriptions
         </Item>
+        <Hr />
         <Item>
           <VideoLibraryOutlinedIcon />
           Library
@@ -77,6 +83,7 @@ const Menu = () => {
           <HistoryOutlinedIcon />
           History
         </Item>
+        <Hr />
         <Item>
           <LibraryMusicOutlinedIcon />
           Music
@@ -101,6 +108,7 @@ const Menu = () => {
           <LiveTvOutlinedIcon />
           Live
         </Item>
+        <Hr />
         <Item>
           <SettingsOutlinedIcon />
           Settings
