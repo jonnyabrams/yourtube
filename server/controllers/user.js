@@ -41,32 +41,42 @@ export const getUser = async (req, res, next) => {
 }
 
 export const subscribe = async (req, res, next) => {
-  try {
+  const user = await User.findById(req.user.id)
 
-    await User.findByIdAndUpdate(req.user.id, {
-      $push: {subscribedTo: req.params.id}
-    })
-    await User.findByIdAndUpdate(req.params.id, {
-      $inc: { subscribers: 1}  // mongoose increment method
-    })
-    res.status(200).send('Subscription successful!')
-  } catch (error) {
-    next(error)
+  if (!user.subscribedTo.includes(req.params.id)) {
+    try {
+      await User.findByIdAndUpdate(req.user.id, {
+        $push: { subscribedTo: req.params.id }
+      })
+      await User.findByIdAndUpdate(req.params.id, {
+        $inc: { subscribers: 1}  // mongoose increment method
+      })
+      res.status(200).send('Subscription successful!')
+    } catch (error) {
+      next(error)
+    }
+  } else {
+    return next(createError(403, 'You already subscribe to this user'))
   }
 }
 
 export const unsubscribe = async (req, res, next) => {
-  try {
+  const user = await User.findById(req.user.id)
 
-    await User.findByIdAndUpdate(req.user.id, {
-      $pull: {subscribedTo: req.params.id}
-    })
-    await User.findByIdAndUpdate(req.params.id, {
-      $inc: { subscribers: -1}
-    })
-    res.status(200).send('Unsubscription successful')
-  } catch (error) {
-    next(error)
+  if (user.subscribedTo.includes(req.params.id)) {
+    try {
+      await User.findByIdAndUpdate(req.user.id, {
+        $pull: { subscribedTo: req.params.id }
+      })
+      await User.findByIdAndUpdate(req.params.id, {
+        $inc: { subscribers: -1}
+      })
+      res.status(200).send('Unsubscription successful')
+    } catch (error) {
+      next(error)
+    }
+  } else {
+    return next(createError(403, 'You are not subscribed to this user'))
   }
 }
 
