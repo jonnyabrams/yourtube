@@ -3,6 +3,8 @@ import TimeAgo from 'react-timeago'
 import axios from 'axios'
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
+import { useDispatch } from 'react-redux'
+import { view } from '../redux/videoSlice'
 
 const Container = styled.div`
   width: ${(props) => props.type !== 'sm' && '360px'};
@@ -56,6 +58,7 @@ const Info = styled.div`
 
 const Card = ({ type, video }) => {
   const [channel, setChannel] = useState({})
+  const dispatch = useDispatch()
 
   useEffect(() => {
     const fetchChannel = async () => {
@@ -65,8 +68,13 @@ const Card = ({ type, video }) => {
     fetchChannel()
   }, [video.userId])
 
+  const handleView = async () => {
+    await axios.put(`/videos/view/${video._id}`)
+    dispatch(view)
+  }
+
   return (
-    <Link to={`/video/${video._id}`} style={{ textDecoration: "none" }}>
+    <Link to={`/video/${video._id}`} style={{ textDecoration: "none" }} onClick={handleView} >
       <Container type={type}>
         <Image type={type} src={video.imgUrl} />
         <Details type={type}>

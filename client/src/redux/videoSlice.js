@@ -42,10 +42,13 @@ export const videoSlice = createSlice({
           1
         )
       }
+    },
+    view: (state) => {
+      state.currentVideo.views += 1
     }
   }
 })
 
-export const { fetchStart, fetchSuccess, fetchFailure, like, dislike } = videoSlice.actions
+export const { fetchStart, fetchSuccess, fetchFailure, like, dislike, view } = videoSlice.actions
 
 export default videoSlice.reducer
