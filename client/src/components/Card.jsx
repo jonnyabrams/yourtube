@@ -50,16 +50,16 @@ const Info = styled.div`
   color: ${({ theme }) => theme.textSoft};
 `
 
-const Card = ({ type }) => {
+const Card = ({ type, video }) => {
   return (
     <Container type={type}>
-      <Image type={type} src='https://yt3.ggpht.com/ytc/AKedOLQOuaQIk0NJjjw5bbsv9v9CrDvNKRVjGii426be4Q=s176-c-k-c0x00ffffff-no-rj-mo' />
+      <Image type={type} src={video.imgUrl} />
       <Details type={type}>
         <ChannelImage type={type} />
         <Texts>
-          <Title>Test Video</Title>
+          <Title>{video.title}</Title>
           <ChannelName>YourTube</ChannelName>
-          <Info>1,000,000 views • 8 days ago</Info>
+          <Info>{video.views} views • {video.createdAt}</Info>
         </Texts>
       </Details>
     </Container>

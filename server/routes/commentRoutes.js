@@ -14,3 +14,4 @@ router.delete('/:id', verifyToken, deleteComment)
 router.get('/:videoId', getComments)
 
 export default router
+ 
