@@ -5,6 +5,12 @@ import ReplyOutlinedIcon from "@mui/icons-material/ReplyOutlined"
 import AddTaskOutlinedIcon from "@mui/icons-material/AddTaskOutlined"
 import Comments from "../components/Comments"
 import Card from "../components/Card"
+import { useDispatch, useSelector } from 'react-redux'
+import { useLocation } from "react-router-dom"
+import { useEffect, useState } from "react"
+import axios from "axios"
+import { fetchSuccess } from "../redux/videoSlice"
+import TimeAgo from 'react-timeago'
 
 const Container = styled.div`
   display: flex;
@@ -108,6 +114,28 @@ const Subscribe = styled.button`
 `
 
 const Video = () => {
+  const currentUser = useSelector((state) => state.user.currentUser)
+  const { currentVideo } = useSelector((state) => state.video)
+  const dispatch = useDispatch()
+
+  const path = useLocation().pathname.split("/")[2]
+
+  const [channel, setChannel] = useState({})
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const videoRes = await axios.get(`/videos/find/${path}`)
+        const channelRes = await axios.get(`/users/find/${videoRes.data.userId}`)
+        setChannel(channelRes.data)
+        dispatch(fetchSuccess(videoRes.data))
+      } catch (error) {
+        console.log(error)
+      }
+    }
+    fetchData()
+  }, [path, dispatch])
+
   return (
     <Container>
       <Content>
@@ -122,12 +150,12 @@ const Video = () => {
               allowFullScreen
           ></iframe>
         </VideoWrapper>
-        <Title>Test Video</Title>
+        <Title>{currentVideo.title}</Title>
         <Details>
-          <Info>660,908 views • 1 day ago</Info>
+          <Info>{currentVideo.views} • <TimeAgo date={currentVideo.createdAt} /></Info>
           <Buttons>
-            <Button><ThumbUpOutlinedIcon /> 780</Button>
-            <Button><ThumbDownOffAltOutlinedIcon /> 145</Button>
+            <Button><ThumbUpOutlinedIcon /> {currentVideo.likes?.length}</Button>
+            <Button><ThumbDownOffAltOutlinedIcon /> {currentVideo.dislikes?.length}</Button>
             <Button><ReplyOutlinedIcon /> Share</Button>
             <Button><AddTaskOutlinedIcon /> Save</Button>
           </Buttons>
@@ -135,11 +163,11 @@ const Video = () => {
         <Hr />
         <Channel>
           <ChannelInfo>
-            <Image src='https://yt3.ggpht.com/ytc/AKedOLQOuaQIk0NJjjw5bbsv9v9CrDvNKRVjGii426be4Q=s176-c-k-c0x00ffffff-no-rj-mo' />
+            <Image src={channel.img} />
             <ChannelDetail>
-              <ChannelName>The Iain Duncan Smiths</ChannelName>
-              <ChannelCounter>13k subscribers</ChannelCounter>
-              <ChannelDescription>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Vitae sint eos atque ex voluptatibus eum nihil quo nisi aperiam at suscipit, nobis ducimus nostrum debitis sapiente assumenda vero praesentium. Consectetur?</ChannelDescription>
+              <ChannelName>{channel.name}</ChannelName>
+              <ChannelCounter>{channel.subscribers} subscribers</ChannelCounter>
+              <ChannelDescription>{currentVideo.description}</ChannelDescription>
             </ChannelDetail>
           </ChannelInfo>
           <Subscribe>SUBSCRIBE</Subscribe>
@@ -148,20 +176,7 @@ const Video = () => {
         <Comments />
       </Content>
       <Recommendation>
-        <Card type='sm' />
-        <Card type='sm' />
-        <Card type='sm' />
-        <Card type='sm' />
-        <Card type='sm' />
-        <Card type='sm' />
-        <Card type='sm' />
-        <Card type='sm' />
-        <Card type='sm' />
-        <Card type='sm' />
-        <Card type='sm' />
-        <Card type='sm' />
-        <Card type='sm' />
-        <Card type='sm' />
+     
       </Recommendation>
     </Container>
   )
