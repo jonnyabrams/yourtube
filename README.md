@@ -12,3 +12,4 @@ A YouTube clone using the MERN stack, with Firebase storage and styled-component
 * OAuth
 * Firebase
 * JWT Cookies
+* styled-components
