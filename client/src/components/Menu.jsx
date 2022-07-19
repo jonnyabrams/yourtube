@@ -16,8 +16,9 @@ import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined"
 import FlagOutlinedIcon from "@mui/icons-material/FlagOutlined"
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined"
 import SettingsBrightnessOutlinedIcon from "@mui/icons-material/SettingsBrightnessOutlined"
-import { Link } from "react-router-dom"
-import { useSelector } from "react-redux"
+import { Link, useNavigate } from "react-router-dom"
+import { useDispatch, useSelector } from "react-redux"
+import { logout } from "../redux/userSlice"
 
 const Container = styled.div`
   flex: 1;
@@ -87,8 +88,21 @@ const Title = styled.h2`
   margin-bottom: 20px;
 `
 
+const Logout = styled.button`
+  font-size: 11px;
+  width: 100%;
+`
+
 const Menu = ({ darkMode, setDarkMode }) => {
   const currentUser = useSelector(state => state.user.currentUser)
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
+
+  const logOut = async (e) => {
+    e.preventDefault()
+    dispatch(logout())
+    navigate('/login')
+  }
 
   return (
     <Container>
@@ -99,6 +113,7 @@ const Menu = ({ darkMode, setDarkMode }) => {
             YourTube
           </Logo>
         </Link>
+        {currentUser && <Logout onClick={logOut}>Log out</Logout>}
         <Link to='/' style={{ textDecoration: 'none', color: 'inherit' }}>
           <Item>
             <HomeIcon />
