@@ -106,7 +106,7 @@ const Upload = ({ setOpen }) => {
       (snapshot) => {
         const progress =
           (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-        urlType === "imageUrl" ? setImagePercent(Math.round(progress)) : setVideoPercent(Math.round(progress));
+        urlType === "imgUrl" ? setImagePercent(Math.round(progress)) : setVideoPercent(Math.round(progress));
         switch (snapshot.state) {
           case "paused":
             console.log("Upload is paused");
@@ -134,7 +134,7 @@ const Upload = ({ setOpen }) => {
   }, [video])
 
   useEffect(() => {
-    image && uploadFile(image, 'imageUrl')
+    image && uploadFile(image, 'imgUrl')
   }, [image])
 
   const handleUpload = async (e) => {
