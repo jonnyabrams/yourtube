@@ -1,5 +1,7 @@
 import styled from 'styled-components'
 import TimeAgo from 'react-timeago'
+import axios from 'axios'
+import { useEffect, useState } from 'react'
 
 const Container = styled.div`
   width: ${(props) => props.type !== 'sm' && '360px'};
@@ -52,14 +54,24 @@ const Info = styled.div`
 `
 
 const Card = ({ type, video }) => {
+  const [channel, setChannel] = useState({})
+
+  useEffect(() => {
+    const fetchChannel = async () => {
+      const res = await axios.get(`/users/find/${video.userId}`)
+      setChannel(res.data)
+    }
+    fetchChannel()
+  }, [video.userId])
+
   return (
     <Container type={type}>
       <Image type={type} src={video.imgUrl} />
       <Details type={type}>
-        <ChannelImage type={type} />
+        <ChannelImage type={type} src={channel.img} />
         <Texts>
           <Title>{video.title}</Title>
-          <ChannelName>YourTube</ChannelName>
+          <ChannelName>{channel.name}</ChannelName>
           <Info>{video.views} views • <TimeAgo date={video.createdAt} /></Info>
         </Texts>
       </Details>
