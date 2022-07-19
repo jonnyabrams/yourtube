@@ -1,4 +1,5 @@
 import styled from 'styled-components'
+import TimeAgo from 'react-timeago'
 
 const Container = styled.div`
   width: ${(props) => props.type !== 'sm' && '360px'};
@@ -59,7 +60,7 @@ const Card = ({ type, video }) => {
         <Texts>
           <Title>{video.title}</Title>
           <ChannelName>YourTube</ChannelName>
-          <Info>{video.views} views • {video.createdAt}</Info>
+          <Info>{video.views} views • <TimeAgo date={video.createdAt} /></Info>
         </Texts>
       </Details>
     </Container>
