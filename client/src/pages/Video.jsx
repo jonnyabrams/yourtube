@@ -3,6 +3,8 @@ import ThumbUpOutlinedIcon from "@mui/icons-material/ThumbUpOutlined"
 import ThumbDownOffAltOutlinedIcon from "@mui/icons-material/ThumbDownOffAltOutlined"
 import ReplyOutlinedIcon from "@mui/icons-material/ReplyOutlined"
 import AddTaskOutlinedIcon from "@mui/icons-material/AddTaskOutlined"
+import ThumbDownIcon from "@mui/icons-material/ThumbDown"
+import ThumbUpIcon from "@mui/icons-material/ThumbUp"
 import Comments from "../components/Comments"
 import Card from "../components/Card"
 import { useDispatch, useSelector } from 'react-redux'
@@ -154,8 +156,12 @@ const Video = () => {
         <Details>
           <Info>{currentVideo.views} • <TimeAgo date={currentVideo.createdAt} /></Info>
           <Buttons>
-            <Button><ThumbUpOutlinedIcon /> {currentVideo.likes?.length}</Button>
-            <Button><ThumbDownOffAltOutlinedIcon /> {currentVideo.dislikes?.length}</Button>
+            <Button>
+              {currentVideo.likes?.includes(currentUser._id) ? <ThumbUpOutlinedIcon /> : <ThumbUpIcon />} {currentVideo.likes?.length}
+            </Button>
+            <Button>
+              {currentVideo.dislikes?.includes(currentUser._id) ? <ThumbDownIcon /> : <ThumbDownOffAltOutlinedIcon />} {currentVideo.dislikes?.length}
+            </Button>
             <Button><ReplyOutlinedIcon /> Share</Button>
             <Button><AddTaskOutlinedIcon /> Save</Button>
           </Buttons>
