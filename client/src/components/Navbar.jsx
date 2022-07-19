@@ -4,6 +4,8 @@ import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined"
 import VideoCallOutlinedIcon from "@mui/icons-material/VideoCallOutlined"
 import { Link } from "react-router-dom"
 import { useSelector } from 'react-redux'
+import { useState } from "react"
+import Upload from "./Upload"
 
 const Container = styled.div`
   position: sticky;
@@ -72,30 +74,34 @@ const Avatar = styled.img`
 
 const Navbar = () => {
   const currentUser = useSelector(state => state.user.currentUser)
+  const [open, setOpen] = useState(false)
 
   return (
-    <Container>
-      <Wrapper>
-        <Search>
-          <Input placeholder='Search' />
-          <SearchOutlinedIcon />
-        </Search>
-        {currentUser ? (
-          <User>
-            <VideoCallOutlinedIcon />
-            <Avatar src={currentUser.img} />
-            {currentUser.name}
-          </User>
-        ) : (
-          <Link to='/login' style={{ textDecoration: 'none', color: 'inherit' }}>
-            <Button>
-              <AccountCircleOutlinedIcon />
-              SIGN IN
-            </Button>
-          </Link>
-        )}
-      </Wrapper>
-    </Container>
+    <>
+      <Container>
+        <Wrapper>
+          <Search>
+            <Input placeholder='Search' />
+            <SearchOutlinedIcon />
+          </Search>
+          {currentUser ? (
+            <User>
+              <VideoCallOutlinedIcon onClick={() => setOpen(true)} />
+              <Avatar src={currentUser.img} />
+              {currentUser.name}
+            </User>
+          ) : (
+            <Link to='/login' style={{ textDecoration: 'none', color: 'inherit' }}>
+              <Button>
+                <AccountCircleOutlinedIcon />
+                SIGN IN
+              </Button>
+            </Link>
+          )}
+        </Wrapper>
+      </Container>
+      {open && <Upload setOpen={setOpen} />}
+    </>
   )
 }
 
