@@ -1,4 +1,5 @@
 import { useState } from "react"
+import { useNavigate } from "react-router-dom"
 import styled from "styled-components"
 import axios from 'axios'
 import { useDispatch } from "react-redux"
@@ -72,6 +73,7 @@ const Login = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const dispatch = useDispatch()
+  const navigate = useNavigate()
 
   const handleLogin = async (e) => {
     e.preventDefault()
@@ -79,6 +81,7 @@ const Login = () => {
     try {
       const res = await axios.post('/auth/login', { name, password })
       dispatch(loginSuccess(res.data))
+      navigate('/')
     } catch (error) {
       dispatch(loginFailure())
     }
