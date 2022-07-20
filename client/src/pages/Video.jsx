@@ -6,7 +6,6 @@ import AddTaskOutlinedIcon from "@mui/icons-material/AddTaskOutlined"
 import ThumbDownIcon from "@mui/icons-material/ThumbDown"
 import ThumbUpIcon from "@mui/icons-material/ThumbUp"
 import Comments from "../components/Comments"
-import Card from "../components/Card"
 import { useDispatch, useSelector } from 'react-redux'
 import { useLocation } from "react-router-dom"
 import { useEffect, useState } from "react"
@@ -121,7 +120,7 @@ const VideoFrame = styled.video`
 
 const Video = () => {
   const currentUser = useSelector((state) => state.user.currentUser)
-  const { currentVideo } = useSelector((state) => state.video)
+  const currentVideo = useSelector((state) => state.video.currentVideo)
   const dispatch = useDispatch()
 
   const path = useLocation().pathname.split("/")[2]
