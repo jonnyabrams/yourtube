@@ -6,6 +6,7 @@ import { Link, useNavigate } from "react-router-dom"
 import { useSelector } from 'react-redux'
 import { useState } from "react"
 import Upload from "./Upload"
+import EditProfileModal from "./editProfileModal/EditProfileModal"
 
 const Container = styled.div`
   position: sticky;
@@ -77,6 +78,7 @@ const Navbar = () => {
   const navigate = useNavigate()
   const [open, setOpen] = useState(false)
   const [q, setQ] = useState('') // q for query
+  const [modalOpened, setModalOpened] = useState(false)
 
   return (
     <>
@@ -90,7 +92,7 @@ const Navbar = () => {
             <User>
               <VideoCallOutlinedIcon onClick={() => setOpen(true)} />
               <Avatar src={currentUser.img} />
-              {currentUser.name}
+              <span style={{ cursor: "pointer" }} onClick={() => setModalOpened(true)}>{currentUser.name}</span>
             </User>
           ) : (
             <Link to='/login' style={{ textDecoration: 'none', color: 'inherit' }}>
@@ -102,6 +104,8 @@ const Navbar = () => {
           )}
         </Wrapper>
       </Container>
+      <EditProfileModal modalOpened={modalOpened} setModalOpened={setModalOpened} />
+        <div className="rightbar-info"></div>
       {open && <Upload setOpen={setOpen} />}
     </>
   )
