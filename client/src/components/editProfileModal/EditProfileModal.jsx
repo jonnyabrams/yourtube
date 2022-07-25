@@ -1,8 +1,33 @@
 import { Modal, useMantineTheme } from '@mantine/core'
+import { updateFailure, updateStart, updateSuccess } from '../../redux/userSlice'
+import { useDispatch, useSelector } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
+import { useState } from 'react'
+import axios from 'axios'
 import './edit-profile-modal.css'
 
 const EditProfileModal = ({ modalOpened, setModalOpened }) => {
-  const theme = useMantineTheme();
+  const theme = useMantineTheme()
+  const currentUser = useSelector(state => state.user.currentUser)
+  const [name, setName] = useState(currentUser?.name)
+  const [email, setEmail] = useState(currentUser?.email)
+  const [password, setPassword] = useState(currentUser?.password)
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
+
+  const handleUpdate = async (e) => {
+    e.preventDefault()
+    dispatch(updateStart())
+
+    try {
+      const res = await axios.put(`users/${currentUser._id}`, { name, email, password })
+      dispatch(updateSuccess(res.data))
+      navigate('/')
+    } catch (error) {
+      dispatch(updateFailure())
+    }
+    setModalOpened(false)
+  }
 
   return (
     <Modal
@@ -16,19 +41,15 @@ const EditProfileModal = ({ modalOpened, setModalOpened }) => {
         <h3>Your info</h3>
 
         <div>
-          <input type="text" className="info-input" name="Username" placeholder="Username" />
+          <input type="text" className="info-input" placeholder="Username" onChange={e => setName(e.target.value)} />
         </div>
 
         <div>
-          <input type="text" className="info-input" name="City" placeholder="City" />
+          <input type="text" className="info-input" placeholder="Email" onChange={e => setEmail(e.target.email)} />
         </div>
 
         <div>
-          <input type="text" className="info-input" name="From" placeholder="From" />
-        </div>
-
-        <div>
-          <input type="text" className="info-input" name="Relationship" placeholder="Relationship status" />
+          <input type="text" className="info-input" placeholder="Password" onChange={e => setPassword(e.target.value)} />
         </div>
 
         <div>
@@ -41,7 +62,7 @@ const EditProfileModal = ({ modalOpened, setModalOpened }) => {
           <input type="file" name="CoverImage" />
         </div>
 
-        <button className="info-button">Update</button>
+        <button className="info-button" onClick={handleUpdate}>Update</button>
       </form>
     </Modal>
   );

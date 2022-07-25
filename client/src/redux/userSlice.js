@@ -35,10 +35,21 @@ export const userSlice = createSlice({
       } else {
         state.currentUser.subscribedTo.push(action.payload)
       }
-    }
+    },
+    updateStart: (state) => {
+      state.loading = true
+    },
+    updateSuccess: (state, action) => {
+      state.loading = false
+      state.currentUser = action.payload
+    },
+    updateFailure: (state) => {
+      state.loading = false
+      state.error = true
+    },
   }
 })
 
-export const { loginStart, loginSuccess, loginFailure, logout, subscription} = userSlice.actions
+export const { loginStart, loginSuccess, loginFailure, logout, subscription, updateStart, updateSuccess, updateFailure} = userSlice.actions
 
 export default userSlice.reducer
