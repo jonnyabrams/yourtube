@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom"
 import styled from "styled-components"
 import axios from 'axios'
 import { useDispatch } from "react-redux"
-import { loginFailure, loginStart, loginSuccess } from "../redux/userSlice"
+import { authFailure, authStart, authSuccess } from "../redux/userSlice"
 import { auth, provider } from "../firebase"
 import { signInWithPopup } from 'firebase/auth'
 
@@ -77,29 +77,41 @@ const Login = () => {
 
   const handleLogin = async (e) => {
     e.preventDefault()
-    dispatch(loginStart())
+    dispatch(authStart())
     try {
       const res = await axios.post('/auth/login', { name, password })
-      dispatch(loginSuccess(res.data))
+      dispatch(authSuccess(res.data))
       navigate('/')
     } catch (error) {
-      dispatch(loginFailure())
+      dispatch(authFailure())
+    }
+  }
+
+  const handleRegister = async (e) => {
+    e.preventDefault()
+    dispatch(authStart())
+    try {
+      const res = await axios.post('/auth/signup', { name, email, password })
+      dispatch(authSuccess(res.data))
+      navigate('/')
+    } catch (error) {
+      dispatch(authFailure())
     }
   }
 
   const signInWithGoogle = async () => {
-    dispatch(loginStart())
+    dispatch(authStart())
     signInWithPopup(auth, provider).then((result) => {
       axios.post('/auth/google', {
         name: result.user.displayName,
         email: result.user.email,
         img: result.user.photoURL,
       }).then((res) => {
-        dispatch(loginSuccess(res.data))
+        dispatch(authSuccess(res.data))
       })
     })
     .catch((error) => {
-      dispatch(loginFailure())
+      dispatch(authFailure())
     })
   }
   
@@ -117,7 +129,7 @@ const Login = () => {
         <Input placeholder='username' onChange={e => setName(e.target.value)} />
         <Input placeholder='email' onChange={e => setEmail(e.target.value)} />
         <Input type='password' placeholder='password' onChange={e => setPassword(e.target.value)} />
-        <Button>Sign up</Button>
+        <Button onClick={handleRegister}>Sign up</Button>
       </Wrapper>
       <More>
         English(GB)
