@@ -56,9 +56,7 @@ const EditProfileModal = ({ modalOpened, setModalOpened }) => {
       (error) => {},
       () => {
         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-          setInputs((prev) => {
-            return { ...prev, img: downloadURL };
-          });
+          setInputs({ ...inputs, img: downloadURL });
         });
       }
     );
