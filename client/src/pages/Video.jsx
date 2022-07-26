@@ -14,7 +14,6 @@ import { dislike, fetchSuccess, like } from "../redux/videoSlice"
 import TimeAgo from 'react-timeago'
 import { subscription } from "../redux/userSlice"
 import Recommendation from "../components/Recommendation"
-import EditProfileModal from "../components/editProfileModal/EditProfileModal"
 
 const Container = styled.div`
   display: flex;
