@@ -120,13 +120,13 @@ const VideoFrame = styled.video`
 
 const Video = () => {
   const currentUser = useSelector((state) => state.user.currentUser)
-  const currentVideo = useSelector((state) => state.video.currentVideo)
+  const {currentVideo} = useSelector((state) => state.video)
   const dispatch = useDispatch()
 
   const path = useLocation().pathname.split("/")[2]
 
   const [channel, setChannel] = useState({})
-
+ 
   useEffect(() => {
     const fetchData = async () => {
       try {
