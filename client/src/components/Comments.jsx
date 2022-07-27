@@ -1,6 +1,7 @@
 import axios from "axios"
 import { useEffect, useState } from "react"
 import { useSelector } from "react-redux"
+import { useNavigate } from "react-router-dom"
 import styled from "styled-components"
 import Comment from "./Comment"
 
@@ -30,8 +31,10 @@ const Input = styled.input`
 `
 
 const Comments = ({ videoId }) => {
+  const [newComment, setNewComment] = useState('')
   const [comments, setComments] = useState([])
   const currentUser = useSelector((state) => state.user.currentUser)
+  const navigate = useNavigate()
 
   useEffect(() => {
     const fetchComments = async () => {
@@ -45,15 +48,28 @@ const Comments = ({ videoId }) => {
     fetchComments()
   }, [videoId])
 
+  const handleChange = (e) => {
+    setNewComment(e.target.value)
+  }
+
+  const handleNewComment = async (e) => {
+    e.preventDefault()
+    const res = await axios.post('/comments', { content: newComment, videoId: videoId })
+    res.status === 200 && window.location.reload()
+  }
+
   return (
     <Container>
       <NewComment>
-        <Avatar src={currentUser.img} />   
-        <Input placeholder='Add a comment...' />
+        <Avatar src={currentUser.img} />
+        <form onSubmit={handleNewComment}>
+          <Input placeholder='Add a comment...' onChange={handleChange} />
+          <button type='submit'>Send</button>
+        </form>
       </NewComment>
-      {comments.map((comment) => {
+      {comments.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)).map((comment) => (
         <Comment key={comment._id} comment={comment} />
-      })}
+      ))}
     </Container>
   )
 }
