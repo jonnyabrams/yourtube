@@ -120,7 +120,8 @@ const VideoFrame = styled.video`
 
 const Video = () => {
   const currentUser = useSelector((state) => state.user.currentUser)
-  const {currentVideo} = useSelector((state) => state.video)
+  const { currentVideo } = useSelector((state) => state.video)
+  const currentVideo2 = useSelector((state) => state.video.currentVideo)
   const dispatch = useDispatch()
 
   const path = useLocation().pathname.split("/")[2]
@@ -142,12 +143,12 @@ const Video = () => {
   }, [path, dispatch])
 
   const handleLike = async () => {
-    await axios.put(`/users/like/${currentVideo._id}`)
-    dispatch(like(currentUser._id))
+    await axios.put(`/users/like/${currentVideo._id || currentVideo2._id}`)
+    dispatch(like(currentUser._id || currentVideo2._id))
   }
 
   const handleDislike = async () => {
-    await axios.put(`/users/dislike/${currentVideo._id}`)
+    await axios.put(`/users/dislike/${currentVideo._id || currentVideo2._id}`)
     dispatch(dislike(currentUser._id))
   }
 
@@ -162,17 +163,17 @@ const Video = () => {
     <Container>
       <Content>
         <VideoWrapper>
-          <VideoFrame src={currentVideo.videoUrl} controls />
+          <VideoFrame src={currentVideo.videoUrl || currentVideo2.videoUrl} controls />
         </VideoWrapper>
-        <Title>{currentVideo.title}</Title>
+        <Title>{currentVideo.title || currentVideo2.title}</Title>
         <Details>
-          <Info>{currentVideo.views} • <TimeAgo date={currentVideo.createdAt} /></Info>
+          <Info>{currentVideo.views} • <TimeAgo date={currentVideo.createdAt || currentVideo2.createdAt} /></Info>
           <Buttons>
             <Button onClick={handleLike}>
-              {currentVideo.likes?.includes(currentUser._id) ? (<ThumbUpIcon />) : (<ThumbUpOutlinedIcon />)} {currentVideo.likes?.length}
+              {currentVideo.likes?.includes(currentUser._id) || currentVideo2.likes?.includes(currentUser._id) ? (<ThumbUpIcon />) : (<ThumbUpOutlinedIcon />)} {currentVideo.likes?.length || currentVideo2.likes?.length}
             </Button>
             <Button onClick={handleDislike}>
-              {currentVideo.dislikes?.includes(currentUser._id) ? (<ThumbDownIcon />) : (<ThumbDownOffAltOutlinedIcon />)} Dislike
+              {currentVideo.dislikes?.includes(currentUser._id) || currentVideo2.dislikes?.includes(currentUser._id) ? (<ThumbDownIcon />) : (<ThumbDownOffAltOutlinedIcon />)} Dislike
             </Button>
             <Button><ReplyOutlinedIcon /> Share</Button>
             <Button><AddTaskOutlinedIcon /> Save</Button>
@@ -185,7 +186,7 @@ const Video = () => {
             <ChannelDetail>
               <ChannelName>{channel.name}</ChannelName>
               <ChannelCounter>{channel.subscribers === 1 ? '1 subscriber' : `${channel.subscribers} subscribers`}</ChannelCounter>
-              <ChannelDescription>{currentVideo.description}</ChannelDescription>
+              <ChannelDescription>{currentVideo.description || currentVideo2.description}</ChannelDescription>
             </ChannelDetail>
           </ChannelInfo>
           <Subscribe onClick={handleSub}>
@@ -195,7 +196,7 @@ const Video = () => {
         <Hr />
         <Comments videoId={currentVideo._id} />
       </Content>
-      <Recommendation tags={currentVideo.tags} />
+      <Recommendation tags={currentVideo.tags || currentVideo2.tags} />
     </Container>
   )
 }
