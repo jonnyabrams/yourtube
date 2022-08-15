@@ -16,15 +16,15 @@ https://user-images.githubusercontent.com/97295867/181261821-f1eedb51-4b95-473e-
 
 ## Technologies Used
 
-* React.js
-* Node.js
-* Express.js
-* MongoDB
-* Redux Toolkit
-* OAuth
-* Firebase
-* JWT Cookies
-* styled-components
+- React.js
+- Node.js
+- Express.js
+- MongoDB
+- Redux Toolkit
+- OAuth
+- Firebase
+- JWT Cookies
+- styled-components
 
 ---
 

@@ -1,12 +1,12 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import styled from "styled-components"
+import styled from "styled-components";
 import Card from "./Card";
 
 const Container = styled.div`
-flex: 2;
-`
+  flex: 2;
+`;
 
 const Recommendation = ({ tags }) => {
   const [videos, setVideos] = useState([]);
@@ -17,7 +17,7 @@ const Recommendation = ({ tags }) => {
       setVideos(res.data);
     };
     fetchVideos();
-  }, [tags])
+  }, [tags]);
 
   return (
     <Container>
@@ -25,7 +25,7 @@ const Recommendation = ({ tags }) => {
         <Card type="sm" key={video._id} video={video} />
       ))}
     </Container>
-  )
-}
+  );
+};
 
-export default Recommendation
+export default Recommendation;

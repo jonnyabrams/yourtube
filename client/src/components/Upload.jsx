@@ -1,14 +1,14 @@
-import { useEffect, useState } from "react"
-import styled from "styled-components"
+import { useEffect, useState } from "react";
+import styled from "styled-components";
 import {
   getStorage,
   ref,
   uploadBytesResumable,
   getDownloadURL,
-} from 'firebase/storage'
-import app from '../firebase'
-import axios from 'axios'
-import { useNavigate } from "react-router-dom"
+} from "firebase/storage";
+import app from "../firebase";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const Container = styled.div`
   width: 100%;
@@ -20,7 +20,7 @@ const Container = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-`
+`;
 
 const Wrapper = styled.div`
   width: 600px;
@@ -32,18 +32,18 @@ const Wrapper = styled.div`
   flex-direction: column;
   gap: 20px;
   position: relative;
-`
+`;
 
 const Close = styled.div`
   position: absolute;
   top: 10px;
   right: 10px;
   cursor: pointer;
-`
+`;
 
 const Title = styled.h1`
   text-align: center;
-`
+`;
 
 const Input = styled.input`
   border: 1px solid ${({ theme }) => theme.soft};
@@ -51,7 +51,7 @@ const Input = styled.input`
   border-radius: 3px;
   padding: 10px;
   background-color: transparent;
-`
+`;
 
 const Description = styled.textarea`
   border: 1px solid ${({ theme }) => theme.soft};
@@ -59,7 +59,7 @@ const Description = styled.textarea`
   border-radius: 3px;
   padding: 10px;
   background-color: transparent;
-`
+`;
 
 const Button = styled.button`
   border-radius: 3px;
@@ -76,37 +76,39 @@ const Label = styled.label`
 `;
 
 const Upload = ({ setOpen }) => {
-  const [image, setImage] = useState(undefined)
-  const [video, setVideo] = useState(undefined)
-  const [imagePercent, setImagePercent] = useState(0)
-  const [videoPercent, setVideoPercent] = useState(0)
-  const [inputs, setInputs] = useState({})
-  const [tags, setTags] = useState([])
+  const [image, setImage] = useState(undefined);
+  const [video, setVideo] = useState(undefined);
+  const [imagePercent, setImagePercent] = useState(0);
+  const [videoPercent, setVideoPercent] = useState(0);
+  const [inputs, setInputs] = useState({});
+  const [tags, setTags] = useState([]);
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setInputs((prev) => {
-      return { ...prev, [e.target.name]: e.target.value }
-    })
-  }
+      return { ...prev, [e.target.name]: e.target.value };
+    });
+  };
 
   const handleTags = (e) => {
-    setTags(e.target.value.split(','))
-  }
+    setTags(e.target.value.split(","));
+  };
 
   const uploadFile = (file, urlType) => {
-    const storage = getStorage(app)
-    const fileName = new Date().getTime() + file.name
-    const storageRef = ref(storage, fileName)
-    const uploadTask = uploadBytesResumable(storageRef, file)
+    const storage = getStorage(app);
+    const fileName = new Date().getTime() + file.name;
+    const storageRef = ref(storage, fileName);
+    const uploadTask = uploadBytesResumable(storageRef, file);
 
     uploadTask.on(
       "state_changed",
       (snapshot) => {
         const progress =
           (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-        urlType === "imgUrl" ? setImagePercent(Math.round(progress)) : setVideoPercent(Math.round(progress));
+        urlType === "imgUrl"
+          ? setImagePercent(Math.round(progress))
+          : setVideoPercent(Math.round(progress));
         switch (snapshot.state) {
           case "paused":
             console.log("Upload is paused");
@@ -127,22 +129,22 @@ const Upload = ({ setOpen }) => {
         });
       }
     );
-  }
+  };
 
   useEffect(() => {
-    video && uploadFile(video, 'videoUrl')
-  }, [video])
+    video && uploadFile(video, "videoUrl");
+  }, [video]);
 
   useEffect(() => {
-    image && uploadFile(image, 'imgUrl')
-  }, [image])
+    image && uploadFile(image, "imgUrl");
+  }, [image]);
 
   const handleUpload = async (e) => {
-    e.preventDefault()
-    const res = await axios.post('/videos', {...inputs, tags})
-    setOpen(false)
-    res.status === 200 && navigate(`/video/${res.data._id}`)
-  }
+    e.preventDefault();
+    const res = await axios.post("/videos", { ...inputs, tags });
+    setOpen(false);
+    res.status === 200 && navigate(`/video/${res.data._id}`);
+  };
 
   return (
     <Container>
@@ -151,31 +153,45 @@ const Upload = ({ setOpen }) => {
         <Title>Upload a new video</Title>
         <Label>Video:</Label>
         {videoPercent > 0 ? (
-          'Uploading:' + videoPercent + '%'
+          "Uploading:" + videoPercent + "%"
         ) : (
-          <Input 
-            type='file' 
-            accept='video/*' 
-            onChange={(e) => setVideo(e.target.files[0])} 
+          <Input
+            type="file"
+            accept="video/*"
+            onChange={(e) => setVideo(e.target.files[0])}
           />
         )}
-        <Input type='text' name='title' placeholder='Title' onChange={handleChange} />
-        <Description name='description' placeholder='Description' rows={8} onChange={handleChange} />
-        <Input type='text' placeholder='Separate the tags with commas' onChange={handleTags} />
+        <Input
+          type="text"
+          name="title"
+          placeholder="Title"
+          onChange={handleChange}
+        />
+        <Description
+          name="description"
+          placeholder="Description"
+          rows={8}
+          onChange={handleChange}
+        />
+        <Input
+          type="text"
+          placeholder="Separate the tags with commas"
+          onChange={handleTags}
+        />
         <Label>Image:</Label>
         {imagePercent > 0 ? (
-          'Uploading:' + imagePercent + '%'
+          "Uploading:" + imagePercent + "%"
         ) : (
-          <Input 
-            type='file' 
-            accept='image/*' 
-            onChange={(e) => setImage(e.target.files[0])} 
+          <Input
+            type="file"
+            accept="image/*"
+            onChange={(e) => setImage(e.target.files[0])}
           />
         )}
         <Button onClick={handleUpload}>Upload</Button>
       </Wrapper>
     </Container>
-  )
-}
+  );
+};
 
-export default Upload
+export default Upload;

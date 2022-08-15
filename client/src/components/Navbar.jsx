@@ -1,19 +1,19 @@
-import styled from "styled-components"
-import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined"
-import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined"
-import VideoCallOutlinedIcon from "@mui/icons-material/VideoCallOutlined"
-import { Link, useNavigate } from "react-router-dom"
-import { useSelector } from 'react-redux'
-import { useState } from "react"
-import Upload from "./Upload"
-import EditProfileModal from "./editProfileModal/EditProfileModal"
+import styled from "styled-components";
+import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
+import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
+import VideoCallOutlinedIcon from "@mui/icons-material/VideoCallOutlined";
+import { Link, useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { useState } from "react";
+import Upload from "./Upload";
+import EditProfileModal from "./editProfileModal/EditProfileModal";
 
 const Container = styled.div`
   position: sticky;
   top: 0;
   background-color: ${({ theme }) => theme.bgLighter};
   height: 56px;
-`
+`;
 
 const Wrapper = styled.div`
   display: flex;
@@ -22,7 +22,7 @@ const Wrapper = styled.div`
   height: 100%;
   padding: 0px 20px;
   position: relative;
-`
+`;
 
 const Search = styled.div`
   width: 40%;
@@ -37,13 +37,13 @@ const Search = styled.div`
   border: 1px solid #ccc;
   border-radius: 3px;
   color: ${({ theme }) => theme.text};
-`
+`;
 
 const Input = styled.input`
   border: none;
   background-color: transparent;
   outline: none;
-`
+`;
 
 const Button = styled.button`
   padding: 5px 15px;
@@ -56,7 +56,7 @@ const Button = styled.button`
   display: flex;
   align-items: center;
   gap: 5px;
-`
+`;
 
 const User = styled.div`
   display: flex;
@@ -64,38 +64,52 @@ const User = styled.div`
   gap: 10px;
   font-weight: 500;
   color: ${({ theme }) => theme.text};
-`
+`;
 
 const Avatar = styled.img`
   width: 32px;
   height: 32px;
   border-radius: 50%;
   background-color: #999;
-`
+`;
 
 const Navbar = () => {
-  const currentUser = useSelector(state => state.user.currentUser)
-  const navigate = useNavigate()
-  const [open, setOpen] = useState(false)
-  const [q, setQ] = useState('') // q for query
-  const [modalOpened, setModalOpened] = useState(false)
+  const currentUser = useSelector((state) => state.user.currentUser);
+  const navigate = useNavigate();
+  const [open, setOpen] = useState(false);
+  const [q, setQ] = useState(""); // q for query
+  const [modalOpened, setModalOpened] = useState(false);
 
   return (
     <>
       <Container>
         <Wrapper>
           <Search>
-            <Input placeholder='Search' onChange={e => setQ(e.target.value)}/>
-            <SearchOutlinedIcon onClick={() => navigate(`/search?q=${q}`)} style={{ cursor: "pointer" }} />
+            <Input
+              placeholder="Search"
+              onChange={(e) => setQ(e.target.value)}
+            />
+            <SearchOutlinedIcon
+              onClick={() => navigate(`/search?q=${q}`)}
+              style={{ cursor: "pointer" }}
+            />
           </Search>
           {currentUser ? (
             <User>
               <VideoCallOutlinedIcon onClick={() => setOpen(true)} />
               <Avatar src={currentUser.img} />
-              <span style={{ cursor: "pointer" }} onClick={() => setModalOpened(true)}>{currentUser.name}</span>
+              <span
+                style={{ cursor: "pointer" }}
+                onClick={() => setModalOpened(true)}
+              >
+                {currentUser.name}
+              </span>
             </User>
           ) : (
-            <Link to='/login' style={{ textDecoration: 'none', color: 'inherit' }}>
+            <Link
+              to="/login"
+              style={{ textDecoration: "none", color: "inherit" }}
+            >
               <Button>
                 <AccountCircleOutlinedIcon />
                 SIGN IN
@@ -104,11 +118,14 @@ const Navbar = () => {
           )}
         </Wrapper>
       </Container>
-      <EditProfileModal modalOpened={modalOpened} setModalOpened={setModalOpened} />
-        <div className="rightbar-info"></div>
+      <EditProfileModal
+        modalOpened={modalOpened}
+        setModalOpened={setModalOpened}
+      />
+      <div className="rightbar-info"></div>
       {open && <Upload setOpen={setOpen} />}
     </>
-  )
-}
+  );
+};
 
-export default Navbar
+export default Navbar;

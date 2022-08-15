@@ -1,15 +1,13 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   currentUser: null,
   loading: false,
-  error: false
-}
+  error: false,
+};
 
-export const commentSlice = createSlice({
- 
-})
+export const commentSlice = createSlice({});
 
-export const { } = commentSlice.actions
+export const {} = commentSlice.actions;
 
-export default commentSlice.reducer
+export default commentSlice.reducer;
